@@ -1,0 +1,28 @@
+{
+  "version": "experimental",
+  "tags": [
+    {
+      "name": "x-scroll-hint",
+      "path": "./../src/index.js",
+      "description": "Our XScrollHint web component class",
+      "cssProperties": [
+        {
+          "name": "--hint-color",
+          "description": "The color of the scroll affordance shadow that is overlaid\non top of overflowing content"
+        },
+        {
+          "name": "--hint-width",
+          "description": "The width of the scroll affordance shadow that is overlaid\non top of overflowing content"
+        },
+        {
+          "name": "--hint-transition-duration",
+          "description": "How long should it take for the shadow to fade in and out?"
+        },
+        {
+          "name": "--hint-transition-timing-function",
+          "description": "What timing function should be used for the shadow's transition?"
+        }
+      ]
+    }
+  ]
+}

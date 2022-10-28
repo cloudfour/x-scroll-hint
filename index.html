@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>X Scroll Hint Component</title>
+
+    <style>
+      body {
+        font-family: sans-serif;
+        line-height: 1.5;
+        max-width: 35em;
+        margin: 0 auto;
+        padding: 1em;
+        background: hsl(260, 20%, 95%);
+      }
+
+      * {
+        margin: 0;
+      }
+
+      :is(main, .table-of-contents) > * + * {
+        margin-top: 1em;
+      }
+
+      :is(main, .table-of-contents) > :is(h1, h2, h3, h4, h5, h6) {
+        margin-top: 2em;
+      }
+
+      code {
+        background-color: hsl(260, 100%, 10%);
+        color: #fff;
+        display: inline-block;
+        padding: 0.1em 0.2em;
+      }
+
+      pre code {
+        display: block;
+        overflow-x: auto;
+        max-width: 100%;
+        padding: 1em;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: hsl(260, 20%, 30%);
+      }
+
+      .example-nav {
+        display: flex;
+        max-width: 100%;
+        overflow-x: scroll;
+        gap: 1em;
+        padding: 1em;
+        background: hsl(260, 20%, 30%);
+      }
+
+      .example-nav a {
+        font-size: 1.2em;
+        white-space: nowrap;
+        color: white;
+      }
+
+      x-scroll-hint {
+        --hint-color: hsl(260, 30%, 20%);
+        --hint-width: 4.5em;
+      }
+    </style>
+
+    <meta
+      name="description"
+      content="A teeny web component to make horizontally scrolling areas more obvious"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="assets/favicon.ico" />
+  </head>
+
+  <body>
+    <main>
+      <h1 id="image-compare">X Scroll Hint</h1>
+
+      <p>
+        <em>
+          A teeny web component to make horizontally scrolling areas more
+          obvious
+        </em>
+      </p>
+
+      <figure>
+        <x-scroll-hint>
+          <nav class="example-nav">
+            <a href="#">Pizza</a>
+            <a href="#">Pasta</a>
+            <a href="#">Antipasto</a>
+            <a href="#">Salads</a>
+            <a href="#">Entrees</a>
+            <a href="#">Seafood</a>
+            <a href="#">Desserts</a>
+            <a href="#">Beer</a>
+            <a href="#">Wine</a>
+            <a href="#">Cocktails</a>
+            <a href="#">Aspertifs</a>
+            <a href="#">Digestifs</a>
+            <a href="#">Family-size Meals</a>
+            <a href="#">Meal Kits</a>
+          </nav>
+        </x-scroll-hint>
+      </figure>
+
+      <pre><code>&lt;x-scroll-hint&gt; 
+  &lt;!-- 
+    A single element with `max-width:100%;` 
+    and `overflow-x: scroll;` 
+  --&gt;
+&lt;/x-scroll-hint&gt;</code></pre>
+    </main>
+    <script src="/src/index.js" type="module"></script>
+  </body>
+</html>
