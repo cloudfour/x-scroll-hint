@@ -4,9 +4,10 @@ Our XScrollHint web component class
 
 ## Methods
 
-| Method                      | Type       |
-|-----------------------------|------------|
-| `adjustOverflowAffordances` | `(): void` |
+| Method                      | Type                    |
+|-----------------------------|-------------------------|
+| `adjustOverflowAffordances` | `(): void`              |
+| `getScrollingEl`            | `(): Node \| undefined` |
 
 ## CSS Custom Properties
 

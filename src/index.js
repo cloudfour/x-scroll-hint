@@ -73,40 +73,51 @@ class XScrollHint extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.scrollWrapper = this.shadowRoot.querySelector(".scroll-wrapper");
+    this.scrollWrapperEl = this.shadowRoot.querySelector(".scroll-wrapper");
+    // TODO: re-run on slot change
+    this.scrollingEl = this.getScrollingEl();
 
     // TODO: Use resize observer
     this.addEventListener("resize", this.adjustOverflowAffordances);
-    // TODO: Throttle scrolling
+
+    // TODO: throttle
     this.addEventListener("scroll", this.adjustOverflowAffordances, true);
+
     this.adjustOverflowAffordances();
   }
 
   adjustOverflowAffordances() {
-    const containerWidth = this.scrollWrapper.clientWidth;
+    if (!this.scrollingEl || !this.scrollWrapperEl) return;
 
-    // TODO: do this once and watch for slot change
-    const content = this.shadowRoot
+    const containerWidth = this.scrollWrapperEl.clientWidth;
+    const scrollingElWidth = this.scrollingEl.scrollWidth;
+    const scrollPos = this.scrollingEl.scrollLeft;
+
+    // TODO: should this also set a scrolled/overflowing percentage which could
+    // be used to scale the affordance by X%? Would that feel smoother?
+    // or awkward?
+    this.scrollWrapperEl.setAttribute("is-scrolled", scrollPos > 0);
+    this.scrollWrapperEl.setAttribute(
+      "is-overflowing",
+      scrollingElWidth - (scrollPos + containerWidth) > 0
+    );
+  }
+
+  getScrollingEl() {
+    const firstChild = this.shadowRoot
       .querySelector("slot")
       .assignedNodes()
       .find((node) => {
-        // find our first, non-text node
+        // find our first non-text node
         return node instanceof HTMLElement;
       });
 
-    if (!content) {
+    if (!firstChild) {
       console.warn("x-scroll-hint expects a single child element");
       return;
     }
 
-    const contentWidth = content.scrollWidth;
-    const scrollPos = content.scrollLeft;
-
-    this.scrollWrapper.setAttribute("is-scrolled", scrollPos > 0);
-    this.scrollWrapper.setAttribute(
-      "is-overflowing",
-      contentWidth - (scrollPos + containerWidth) > 0
-    );
+    return firstChild;
   }
 }
 
