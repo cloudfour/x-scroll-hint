@@ -73,15 +73,28 @@ class XScrollHint extends HTMLElement {
   connectedCallback() {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.scrollWrapperEl = this.shadowRoot.querySelector(".scroll-wrapper");
-    // TODO: re-run on slot change
-    this.scrollingEl = this.getScrollingEl();
+    // TODO: Document throttle speed
+    this.throttleSpeed = this.getAttribute("throttle-speed") || 50;
 
-    // TODO: Use resize observer
-    this.addEventListener("resize", this.adjustOverflowAffordances);
+    this.scrollWrapperEl = this.shadowRoot.querySelector(".scroll-wrapper");
+    this.scrollingEl = this.getScrollingEl();
+    // TODO: Test this
+    addEventListener("slotchange", () => {
+      this.scrollingEl = this.getScrollingEl();
+    });
+
+    // TODO: Test this
+    this.resizeObserver = new ResizeObserver(() => {
+      this.adjustOverflowAffordances();
+    });
+    this.resizeObserver.observe(this);
 
     // TODO: throttle
-    this.addEventListener("scroll", this.adjustOverflowAffordances, true);
+    this.addEventListener(
+      "scroll",
+      smartThrottle(this.adjustOverflowAffordances, this.throttleSpeed),
+      true
+    );
 
     this.adjustOverflowAffordances();
   }
@@ -119,6 +132,33 @@ class XScrollHint extends HTMLElement {
 
     return firstChild;
   }
+}
+
+// TODO: evaluate and clean up code. Should this be moved to the primary class?
+// This throttling function uses a kind of combination of throttling and debouncing
+// for the best of both worlds. By default it throttles, but it has special logic
+// to ensure that if the final scroll event got throttled it still gets called
+// in the end
+// https://codeburst.io/throttling-and-debouncing-in-javascript-b01cad5c8edf
+function smartThrottle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function () {
+    const context = this;
+    const args = arguments;
+    if (!lastRan) {
+      func.apply(context, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(function () {
+        if (Date.now() - lastRan >= limit) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
 }
 
 customElements.define("x-scroll-hint", XScrollHint);
